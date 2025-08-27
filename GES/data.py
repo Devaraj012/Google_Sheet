@@ -2,6 +2,12 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from datetime import datetime
+import os 
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=r"C:\Users\devar\Documents\Code\GIFT\.env")
+
+Cookie_Ticket=os.getenv('GES_COOKIE')
+
 
 scope = [
     'https://www.googleapis.com/auth/spreadsheets',
@@ -54,9 +60,9 @@ files=[
 ]
 
 headers = {
-  'Cookie': 'ticket=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNoYXJlX2RldnJhal9pYnRAZ3JlZW5lc3RlcC5jb20iLCJpZCI6MTgsInR5cGUiOiJBRE1JTiIsImlhdCI6MTc0MjQ1ODk1NCwiZXhwIjoxNzQyNTAyMTU0fQ.M7vyPWohkSlKUao2vkaYD5RQtz7WbxyYpEw1Ge1YBF8'
+  'Cookie': f'ticket={Cookie_Ticket}',
 }
-
+print(headers)
 response = requests.request("POST", url, headers=headers, data=payload, files=files)
 
-print(response.text)    
+print(response.text)

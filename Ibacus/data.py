@@ -2,6 +2,13 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path=r"C:\Users\devar\Documents\Code\GIFT\.env")
+
+cookie_ticket= os.getenv('IBT_COOKIE')
+
 
 #Get data from Googlesheet
 scope = [
@@ -18,11 +25,11 @@ client = gspread.authorize(creds)
 try:
     print("Available Spreadsheets:")
     spreadsheets = client.openall()
-    # for sheet in spreadsheets:
-    #     print(f"- {sheet.title}")
+    for sheet in spreadsheets:
+        print(f"- {sheet.title}")
 
     sheet = client.open("InteractionCounts")
-    worksheet = sheet.get_worksheet(1)
+    worksheet = sheet.get_worksheet(2)
     print("-------------------------------\n")
 
     data = worksheet.get_all_records()
@@ -37,7 +44,11 @@ except gspread.exceptions.SpreadsheetNotFound:
     print("3. The spreadsheet is a Google Sheet and is shared correctly.")
 except Exception as e:
     print(f"An unexpected error occurred: {e}")
+        
     
+#Task details:
+
+
     
 #Upload to GIFT
 
@@ -54,7 +65,7 @@ files=[
 ]
 
 headers = {
-  'Cookie': 'ticket=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRldmFyYWpAaWJhY3VzdGVjaGxhYnMuaW4iLCJpZCI6NCwidHlwZSI6IkFETUlOIiwiaWF0IjoxNzQyNDU3OTM4LCJleHAiOjE3NDI1MDExMzh9.ndQq-fey7ovy9OOEfnXCraL5KsxK96fyPTtiziGVoB4'
+  'Cookie': f'ticket={cookie_ticket}',
 }
 
 response = requests.request("POST", url, headers=headers, data=payload, files=files)
